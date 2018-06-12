@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>测试表单验证插件</title>
+    <link rel="stylesheet" href="z-ui/css/zui.min.css">
+    <script src="js/jquery.js"></script>
+    <script src="z-ui/js/zui.min.js"></script>
+    <script src="js/jquery.validate.js"></script>
+    <script src="js/messages_zh.js"></script>
+    <style>
+    	.auth-form{
+    		width: 260px;
+    		margin: 50px auto;
+    	}
+    	a.show-pwd {
+            position: relative;
+            top: -25px;
+            right: 10px;
+            float: right;
+            height: 0;
+        }
+        .captcha-group {
+            display: block;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .captcha-group img {
+            float: right;
+            width: 36%;
+            height: 32px;
+            cursor: pointer;
+        }
+        .captcha-group input[type=text] {
+            float: left;
+            width: 60%;
+        }
+        .control-label{
+        	margin-right: 10px;
+        }
+        .valid-group{
+            position: relative;
+        }
+        span.valid{
+            display: inline-block;
+            position: absolute;
+            top: 30px;
+            right: -20px;
+            width: 16px;
+            height: 16px;
+            background: url('images/success.png') no-repeat left center;
+        }   
+        span.errorTip{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+	<div class="auth-form">
+            <div class="auth-form-body">
+                <form method="post" id="register-form" class="form">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="wk6kaz7So2N3WOPdd7EHaGAhcfOC6z4dIX53McqFlc9k6p0jav3oayrUi9f3v31y">
+                    <div class="form-group valid-group">
+                        <label class="control-label" for="id_email">邮箱</label>
+                        <input type="email" name="email" placeholder="you@example.com" class="form-control" title="" required="" id="id_email" data-toggle="email1528692627896" data-original-title="<span class='email1528692627896'><i class='icon-exclamation-sign'></i> 请输入正确的Email</span>">
+                    </div>
+                    <div class="form-group valid-group">
+                        <label class="control-label" for="id_nickname">昵称</label>
+                        <input type="text" name="nickname" placeholder="请输入昵称" maxlength="10" class="form-control" title="" required="" id="id_nickname" data-toggle="nickname1528692627896" data-original-title="<span class='nickname1528692627896'><i class='icon-ok-sign'></i> 昵称可用</span>">
+                    </div>
+                    <div class="form-group valid-group">
+                        <label class="control-label" for="id_password">
+                            密码
+                        </label>
+                        <div class="pwd-pd">
+                            <input type="password" name="password" placeholder="请输入6-12位密码" value="" class="form-control" required="" maxlength="20" id="id_password" data-toggle="nickname1528692627896" data-original-title="<span class='nickname1528692627896'><i class='icon-exclamation-sign'></i> 请输入6-20位密码</span>">
+                            <a href="javascript:void(0);" class="show-pwd">
+                                <i class="icon icon-eye-open"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group valid-group">
+                        <label class="control-label" for="id_is_staff_0">角色</label>
+                        <div class="radio-inline">
+                            <div id="id_is_staff">
+                                <div class="radio-inline">
+                                    <label for="id_is_staff_0">
+                                        <input type="radio" name="is_staff" value="0" class="" title="" id="id_is_staff_0" checked>学生
+                                    </label>
+                                </div>
+                                <div class="radio-inline">
+                                    <label for="id_is_staff_1">
+                                        <input type="radio" name="is_staff" value="1" class="" title="" id="id_is_staff_1">教师
+                                    </label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group valid-group">
+                        <label class="control-label" for="">验证码</label>
+                        <div class="captcha-group" style="overflow: hidden;">
+                            <input class="form-control" autocomplete="off" id="id_captcha_1" name="captcha_1" type="text" placeholder="请输入验证码">
+                            <img id="captcha-image" src="" alt="captcha" title="点击切换验证码">
+                            <input id="id_captcha_0" name="captcha_0" type="hidden" value="c4875d07de2feea8136bc5e26716c130eb330e11">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="id_submit" class="btn btn-success btn-lg btn-block" data-loading="请稍候...">注册雪梨教育</button>
+                </form>
+            </div>
+        </div>
+
+   <script>
+    $.validator.setDefaults({
+        success: function(span) {
+            span.text("").addClass("valid");
+            /*$(".pwd-pd").find('span').removeClass('valid');*/
+        },
+        submitHandler: function() {
+            alert("submitted!");
+        }
+    });
+
+    $.validator.addMethod("emails",function(value,element,param){
+        var reg=/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+        return reg.test(value);
+    },"邮箱格式不正确!");
+
+
+   	$(function(){
+         $("#register-form").submit(function(e){
+            e.preventDefault();
+          });
+
+   		var validator=$("#register-form").validate({
+            errorClass:"errorTip",
+            errorElement:"span",
+            rules:{
+                email:{
+                    required:true,
+                    email:true,
+                    emails:true,
+                    /*remote:{
+                        url:"/api/input_validator/?resource=Register",
+                        type:"post",
+                        data:{
+                            email: function (){
+                                return $('input[name="email"]').val()
+                            }
+                        },
+                    }*/
+                },
+                nickname:"required",
+                password:{
+                    required:true,
+                    rangelength:[6,20]
+                }
+            },
+            messages:{
+                email:{
+                    required:"邮箱不能为空!",
+                    email:"邮箱格式不正确!"
+                },
+                nickname:{
+                    required:"昵称不能为空"
+                },
+                password:{
+                    required:"密码不能为空!",
+                    rangelength:$.validator.format("请输入{0} 到 {1} 位密码")
+                }
+            }
+   		});
+   	})
+   </script>
+</body>
+</html>
