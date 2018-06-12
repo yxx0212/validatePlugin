@@ -51,7 +51,7 @@
             background: url('images/success.png') no-repeat left center;
         }   
         span.errorTip{
-            color: red;
+            color: #ea644a;
         }
     </style>
 </head>
@@ -115,10 +115,11 @@
     $.validator.setDefaults({
         success: function(span) {
             span.text("").addClass("valid");
-            /*$(".pwd-pd").find('span').removeClass('valid');*/
+            $(".pwd-pd").find('span').removeClass('valid');
         },
         submitHandler: function() {
             alert("submitted!");
+            form.submit();
         }
     });
 
@@ -163,7 +164,7 @@
                     email:"邮箱格式不正确!"
                 },
                 nickname:{
-                    required:"昵称不能为空"
+                    required:"昵称不能为空!"
                 },
                 password:{
                     required:"密码不能为空!",
